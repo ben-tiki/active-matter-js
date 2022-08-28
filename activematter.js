@@ -98,7 +98,7 @@ function main() {
         // if bird at index b is within interaction radius other birds, true else false
         var neighbors = distance.map((d) => d < interaction_radius ** 2 ? true : false);
 
-        // calculate theta for each bird (if neibghbor)
+        // calculate theta for each bird (if neighbor)
         var sx = 0;
         for (var i = 0; i < number_birds; i++) {
             if (neighbors[i]) {
