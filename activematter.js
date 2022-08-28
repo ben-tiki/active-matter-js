@@ -17,7 +17,7 @@ window.addEventListener("resize", function () {
 // math functions
 var cos = Math.cos,
     sin = Math.sin;
-atan2 = Math.atan2;
+    atan2 = Math.atan2;
 
 function sum(array) {
     let sum = 0;
@@ -144,6 +144,52 @@ function main() {
     time_elapsed += 1;
 
 }
+// -------------------------- FUNCTIONALITIES ----------------------
+// add new bird on mouse coordinates on click
+canvas.addEventListener("click", function (e) {
+    x_positions.push(e.clientX);
+    y_positions.push(e.clientY);
+    theta.push(Math.random() * Math.PI * 2);
+    vector_x.push(Math.cos(theta[theta.length - 1]) * velocity);
+    vector_y.push(Math.sin(theta[theta.length - 1]) * velocity);
+    number_birds += 1;
+});
+
+// make birds avoid mouse position on mousemove
+canvas.addEventListener("mousemove", function (e) {
+    var mouse_x = e.clientX;
+    var mouse_y = e.clientY;
+    var mouse_distances_x = x_positions.map(x => (x - mouse_x) ** 2);
+    var mouse_distances_y = y_positions.map(y => (y - mouse_y) ** 2);
+    var mouse_distance = mouse_distances_x.map((x, i) => (x + mouse_distances_y[i]));
+    var mouse_neighbors = mouse_distance.map((d) => d < interaction_radius ** 2 ? true : false);
+
+    // if bird is within interaction radius of mouse, make it avoid mouse
+    for (var b = 0; b < number_birds; b++) {
+        if (mouse_neighbors[b]) {
+
+            // if mouse is coming from the right, substract from vector_x
+            if (mouse_x > x_positions[b]) {
+                vector_x[b] -= cos(theta[b]) * velocity;
+            }
+
+            // if mouse is coming from the left, add to vector_x
+            else if (mouse_x < x_positions[b]) {
+                vector_x[b] +=  cos(theta[b]) * velocity;
+            }
+
+            // if mouse is coming from the top, substract from vector_y
+            if (mouse_y > y_positions[b]) {
+                vector_y[b] -= sin(theta[b]) * velocity;
+            }
+
+            // if mouse is coming from the bottom, add to vector_y
+            else if (mouse_y < y_positions[b]) {
+                vector_y[b] += sin(theta[b]) * velocity;
+            }
+        }
+    }
+})
 
 // -------------------------- ANIMATION ----------------------------
 setInterval(function () {
