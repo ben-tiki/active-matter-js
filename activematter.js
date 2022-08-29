@@ -36,10 +36,27 @@ function rgb(r, g, b) {
     return ["rgb(", r, ",", g, ",", b, ")"].join("");
 }
 
+// color dictionary
+var colors = {
+    1: rgb(160, 0, 14),
+	2: rgb(195, 0, 16),
+	3: rgb(209, 0, 31),
+	4: rgb(222, 10, 38),
+	5: rgb(240, 30, 44),
+	6: rgb(254, 44, 44),
+	7: rgb(265, 68, 74),
+	8: rgb(238, 107, 107),
+	9: rgb(246, 150, 152),
+	10:rgb(255, 203, 209),
+    11:rgb(240, 240, 240),
+    12:rgb(255, 255, 255),
+
+};
+
 // --------------------------- MAIN --------------------------------
 // simulation parameters
 var velocity = 2.5,
-    fluctuation = 0.5,
+    noise = 0.5,
     box_size = canvas.width,
     interaction_radius = box_size / 50,
     number_birds = 500,
@@ -75,8 +92,8 @@ function main() {
 
     y_positions = y_positions.map(y => {
 
-        if (y > box_size) { return y - box_size; }
-        else if (y < 0) { return y + box_size; }
+        if (y > box_size) { return y - canvas.height; }
+        else if (y < 0) { return y + canvas.height; }
         else { return y; }
     }
     );
@@ -119,24 +136,38 @@ function main() {
     }
 
     // add random movement to each bird
-    theta = mean_theta.map(x => x + fluctuation * (Math.random() - 0.5));
+    theta = mean_theta.map(x => x + noise * (Math.random() - 0.5));
 
     // update the vectors for each bird
     vector_x = theta.map(x => cos(x) * velocity);
     vector_y = theta.map(x => sin(x) * velocity);
 
     // plot the birds on the canvas
+    var neighbor_count = {};
     for (var b = 0; b < number_birds; b++) {
+
+        // get the final distance between each bird and every other bird (x + y)
+        var final_x_distances = x_positions.map(x => (x - x_positions[b]) ** 2);
+        var final_y_distances = y_positions.map(y => (y - y_positions[b]) ** 2);
+        var final_distance = final_x_distances.map((x, i) => (x + final_y_distances[i]));
+        final_distance = final_distance.map((d) => d < interaction_radius ** 2 ? 1 : 0);
+
+        // for each element in the dictionary, add 1 to the value if the bird is within interaction radius of any other bird
+        for (var i = 0; i < number_birds; i++) {
+            if (final_distance[i]) {
+                if (neighbor_count[i] == undefined) {
+                    neighbor_count[i] = 1;
+                } else {
+                    neighbor_count[i] += 1;
+                }
+            }}
 
         ctx.beginPath();
         ctx.arc(x_positions[b], y_positions[b], bird_size, 0, 2 * Math.PI);
 
-        ctx.fillStyle = rgb(
-            Math.floor(100 * (1 - (x_positions[b] / canvas.width))),
-            Math.floor(200 * (1 - (y_positions[b] / canvas.height))),
-            Math.floor(250 * (1 - (x_positions[b] / canvas.width)))
+        // map the number of neighbors to a color
+        ctx.fillStyle = colors[neighbor_count[b]];
 
-        );
         ctx.fill();
         ctx.closePath();
     }
