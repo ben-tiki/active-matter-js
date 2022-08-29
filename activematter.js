@@ -39,7 +39,7 @@ function rgb(r, g, b) {
 // --------------------------- MAIN --------------------------------
 // simulation parameters
 var velocity = 2.5,
-    fluctuation = 0.5,
+    noise = 0.5,
     box_size = canvas.width,
     interaction_radius = box_size / 50,
     number_birds = 500,
@@ -119,7 +119,7 @@ function main() {
     }
 
     // add random movement to each bird
-    theta = mean_theta.map(x => x + fluctuation * (Math.random() - 0.5));
+    theta = mean_theta.map(x => x + noise * (Math.random() - 0.5));
 
     // update the vectors for each bird
     vector_x = theta.map(x => cos(x) * velocity);
