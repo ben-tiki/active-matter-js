@@ -12,9 +12,9 @@ This projects creates Boids or "Bird-like" objects moving on the canvas, simulat
 https://user-images.githubusercontent.com/101474762/187568340-0e1ef3d4-2b64-4599-b40a-96d29c8ca485.mov
 
 ### Parameters: 
-1. velocity = 2.5,
-2. noise = 0.5,
-3. box_size = canvas.width,
-4. interaction_radius = box_size / 50,
-5. number_birds = 500,
-6. bird_size = 2;
+1. velocity (speed in which the birds traverse the canvas)
+2. noise (random movement of each bird. If 0 the birds will move on a straight line)
+3. box_size (universe in which the birds will move)
+4. interaction_radius (distance in which another bird is considered a neighbor)
+5. number_birds (amount of birds to populate the simulation)
+6. bird_size (size of the bird on the canvas. Doesent affect the simulation)
