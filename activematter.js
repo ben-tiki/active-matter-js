@@ -100,19 +100,13 @@ function main() {
 
         // calculate theta for each bird (if neighbor)
         var sx = 0;
-        for (var i = 0; i < number_birds; i++) {
-            if (neighbors[i]) {
-                sx += cos(theta[i]);
-
-            }
-        }
-
         var sy = 0;
         for (var i = 0; i < number_birds; i++) {
             if (neighbors[i]) {
+                sx += cos(theta[i]);
                 sy += sin(theta[i]);
-            }
 
+            }
         }
 
         mean_theta[b] = atan2(sy, sx);
