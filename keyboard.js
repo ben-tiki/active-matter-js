@@ -5,8 +5,8 @@ document.addEventListener("keydown", function (e) {
   // if spacebar is pressed pause the animation and a draw "paused"
   // if the spacebar is pressed again, resume the animation
   if (e.key == "p") {
-    pause = !pause;
-    if (pause) {
+    // paused = !paused;
+    if (paused) {
       ctx.fillStyle = "#FFFFFF";
       ctx.font = "50px Arial";
 
@@ -17,7 +17,9 @@ document.addEventListener("keydown", function (e) {
         textString,
         canvas.width / 2 - textWidth / 2,
         canvas.height / 2
+      
       );
+      console.log("paused");
     }
   }
 

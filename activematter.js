@@ -1,10 +1,10 @@
 // -------------------------- MATH --------------------------------
-// math functions
+// math functions and constants
 var cos = Math.cos,
     sin = Math.sin,
     atan2 = Math.atan2,
-    PI = Math.PI,
-    sqrt = Math.sqrt;
+    sqrt = Math.sqrt,p
+    PI = Math.PI;
 
 function sum(array) {
     let sum = 0;
@@ -25,6 +25,7 @@ function rgb(r, g, b) {
 
 // color dictionary
 var colors = {
+    0: rgb(120, 0, 0),
     1: rgb(160, 0, 14),
 	2: rgb(195, 0, 16),
 	3: rgb(209, 0, 31),
@@ -34,21 +35,20 @@ var colors = {
 	7: rgb(265, 68, 74),
 	8: rgb(238, 107, 107),
 	9: rgb(246, 150, 152),
-	10:rgb(255, 203, 209),
-    11:rgb(240, 240, 240),
-    12:rgb(255, 255, 255),
-
+	10: rgb(255, 203, 209),
+    11: rgb(240, 240, 240),
+    12: rgb(255, 255, 255),
 };
 
 // ----------------------- ANIMATION OPTIONS -----------------------
 // animation options
-show_interaction_radius = false;
-pause = false;
-show_menu = true;
-show_status = false;
-focus = false;
-focus_bird = 0;
-predator_exists = true;
+var show_interaction_radius = false,
+    paused = false,
+    show_menu = true,
+    show_status = false,
+    focus = false,
+    focus_bird = 0,
+    predator_exists = false;
 
 // --------------------------- MAIN --------------------------------
 // simulation parameters
@@ -84,6 +84,9 @@ for(var i = 0; i < number_birds; i++) {
 
 // simulation main loop
 function main() {
+
+    // clear the canvas(from the previous frame)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for(var b = 0; b < number_birds; b++) {
 
@@ -159,20 +162,14 @@ function main() {
             ctx.closePath();
         }
 
-        if(b == number_birds){
-            // clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        
-
     }
+    
     requestAnimationFrame(main);
-    // showMenu();
-    // showStatus();
-    // showFocus(neighbor_count);
-    // // predator();
-    // clear canvas
-    // clear the canvas
+    showMenu();
+    showStatus();
+    showFocus(neighbor_count);
+    // predator();
+    
     time_elapsed += 1;
 
 }
@@ -193,6 +190,11 @@ function main() {
 //     }
 
 // }, 10);
+// requestAnimationFrame(main);
+// request animationframe if pause is false
+if (!paused) {
+    requestAnimationFrame(main);
+}
 
-// every time the requestAnimationFrame() method is called, it will call the main() function and clear the canvas
-requestAnimationFrame(main);
+// if paused is false, run the main loop
+
