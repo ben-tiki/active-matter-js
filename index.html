@@ -19,7 +19,31 @@
 
   </style
 </head>
+
   <canvas id="canvas"></canvas>
+  <script>
+    
+            // -------------------------- CANVAS ------------------------------
+            // load the canvas
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            // makes the canvas fullscreen
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // add event listener for canvas resizing
+            window.addEventListener("resize", function () {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+    
+  </script>
+  
+  <script src="keyboard.js"></script>
+  <script src="menu.js"></script>
   <script src="activematter.js"></script>
+  <script src="predator.js"></script>
+
 </body>
 </html>
