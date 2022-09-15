@@ -1,50 +1,206 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset=utf-8 />
-  <title>Animation</title>
-  <style>
-    
-    body {
-          margin: 0;
-          padding: 0;
-          background: #000;
-      }
-
-      canvas {
-          width: 100%;
-          height: 100%;
-          background-color:#000;
-      }
-
-
-  </style
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/top-menu.css">
+  <link rel="stylesheet" href="css/modals.css">
+  <link rel="icon" href="images/boid.png" />
+  <title>Active Matter Simulation</title>
 </head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+  }
+
+  /* position the content above the canvas */
+  .content-container {
+    z-index: 1;
+  }
+
+  /* make the canvas fill the entire screen */
+  #canvas {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<body>
 
   <canvas id="canvas"></canvas>
-  <script>
-    
-            // -------------------------- CANVAS ------------------------------
-            // load the canvas
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
+  <div class="content-container">
 
-            // makes the canvas fullscreen
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+    <!-- top left menu buttons -->
+    <div id="top-menu">
+      <div id="options-icon" class="top-menu-items"><i><img src="images/plus.png"></i></div>
+      <div id="status-icon" class="top-menu-items"><i><img src="images/options.png"></i></div>
+      <div id="focus-icon" class="top-menu-items"><i><img src="images/focus.png"></i></div>
+    </div>
 
-            // add event listener for canvas resizing
-            window.addEventListener("resize", function () {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
+    <!-- pause info -->
+    <div id="pause-info">
+      <h2 id="pause-info-title">Active Matter Simulation</h2>
+      <p id="pause-info-text">Click anywhere to start the simulation.</p>
+      <p id="pause-info-author">by Benjamin Iriarte Crom <a href="https://github.com/ben-tiki">github.com/ben-tiki</a>
+      </p>
+    </div>
+
     
-  </script>
+        <!-- main options -->
+        <div class="modal-container" id="options-modal">
+          <div class="modal-content">
+            <h1>Controls</h1>
+            <hr id="horizonal-control-line">
+            <!-- number of boids -->
+            <div class="main-modal-wrapper">
+              <div class="main-modal-title">Number of Boids</div>
+              <div class="main-modal-content">
+                <input type="range" min="1" max="2000" class="slider" id="boids-number">
+                <p><span id="boids-number-value"></span></p>
+              </div>
+            </div>
+            <!-- boids velocity -->
+            <div class="main-modal-wrapper">
+              <div class="main-modal-title">Boids Velocity</div>
+              <div class="main-modal-content">
+                <input type="range" min="0" max="50" class="slider" id="boids-velocity">
+                <p><span id="boids-velocity-value"></span></p>
+              </div>
+            </div>
+            <!-- boid interaction radius -->
+            <div class="main-modal-wrapper">
+              <div class="main-modal-title">Interaction Radius</div>
+              <div class="main-modal-content">
+                <input type="range" min="0" max="250" class="slider" id="boids-interaction-radius">
+                <p><span id="boids-interaction-radius-value"></span></p>
+              </div>
+            </div>
+            <!-- boid random movement -->
+            <div class="main-modal-wrapper">
+              <div class="main-modal-title">Random Movement</div>
+              <div class="main-modal-content">
+                <input type="range" min="0" max="10" class="slider" id="boids-noise">
+                <p><span id="boids-noise-value"></span></p>
+              </div>
+            </div>
+            <!-- boid si<e -->
+            <div class="main-modal-wrapper">
+              <div class="main-modal-title">Boids Size</div>
+              <div class="main-modal-content">
+                <input type="range" min="0" max="40" class="slider" id="boids-size">
+                <p><span id="boids-size-value"></span></p>
+              </div>
+            </div>
+            <!-- wall behaviour -->
+            <div id="main-menu-buttons">
+              <div class="main-modal-wrapper">
+                <div class="main-modal-title">Wall Collision</div>
+                <div class="main-modal-content">
+                  <button id="boids-bounce">Bounce</button>
+                  <button id="boids-travel">Travel</button>
+                </div>
+              </div>
+              <div id="dropwdown-wrapper">
+                <!-- color options -->
+                <div class="main-modal-wrapper">
+                  <div class="main-modal-title">Color Options</div>
+                  <div class="main-modal-content">
+                    <select name="color-options" id="color-options">
+                      <option value="neighbors">Neighbors</option>
+                      <option value="random">Random</option>
+                      <option value="position">Position</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- spawn options -->
+                <div class="main-modal-wrapper">
+                  <div class="main-modal-title">""</div>
+                  <div class="main-modal-content">
+                    <select name="spawn-options" id="spawn-options">
+                      <option class="option" value="random">Random</option>
+                      <option class="option" value="circle">Circle</option>
+                      <option class="option" value="sin-wave">Sin Wave</option>
+                      <option class="option" value="grid">Grid</option>
+                      <option class="option" value="geometric">Geometric</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- trail options -->
+              <div class="main-modal-wrapper">
+                <div class="main-modal-title">Trail Options</div>
+                <div class="main-modal-content">
+                  <button id="trail-none">None</button>
+                  <button id="trail-soft">Soft</button>
+                  <button id="trail-hard">Hard</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
   
-  <script src="keyboard.js"></script>
-  <script src="menu.js"></script>
-  <script src="predator.js"></script>
-  <script src="activematter.js"></script>
+    <!-- status modal -->
+    <div class="modal-container" id="status-modal">
+      <div class="modal-content">
+        <h1>Status</h1>
+        <hr>
+        <h3 id="number-birds-display"></h3>
+        <h3 id="bird-size-display"></h3>
+        <h3 id="bird-velocity-display"></h3>
+        <h3 id="interaction-radius-display"></h3>
+        <h3 id="bird-noise-display"></h3>
+      </div>
+    </div>
 
+      <!-- focus modal -->
+      <div class="modal-container" id="focus-modal">
+        <div class="modal-content">
+          <h1 id="focus-bird-display"></h1>
+          <hr>
+          <h3 id="bird-position-display"></h3>
+          <h3 id="bird-neighbors-display"></h3>
+          <h3 id="bird-angle-display"></h3>
+          <h3 id="bird-quadrant-display"></h3>
+        </div>
+      </div>
+
+    </div>
 </body>
+<script>
+
+  // -------------------------- CANVAS ------------------------------
+  // load the canvas
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+
+  // makes the canvas fullscreen
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // add event listener for canvas resizing
+  window.addEventListener("resize", function () {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  );
+
+</script>
+
+<script src="javascript/keyboardEvents.js"></script>
+<script src="javascript/modals.js"></script>
+<script src="javascript/helpers.js"></script>
+<script src="javascript/activematter.js"></script>
+<script src="javascript/menu.js"></script>
+<script src="javascript/mouseEvents.js"></script>
+
 </html>
