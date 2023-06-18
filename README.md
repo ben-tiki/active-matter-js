@@ -9,7 +9,7 @@ This project demonstrates a simulation of 'Boids' - bird-like objects - interact
  5. **Wraparound**: Boids that reach the edge of the canvas will appear on the opposite edge, maintaining constant population within the visible space.
  
 ### Running the Simulation
-https://user-images.githubusercontent.com/101474762/187568340-0e1ef3d4-2b64-4599-b40a-96d29c8ca485.mov
+https://github.com/ben-tiki/active-matter-js/assets/101474762/9a9e9bf1-4310-4e19-880b-403bc8362e5a
 
 ### Parameters: 
 1. **Velocity**: Control the speed at which the Boids move across the canvas.
