@@ -22,7 +22,7 @@ const boidMovementNoise = 0.5;
 let boundingBoxWidth = canvasElement.width;
 let boundingBoxHeight = canvasElement.height;
 const boidInteractionRadius = boundingBoxWidth / 50;
-const boidNumber = 800;
+const boidNumber = 500;
 const boidSize = 4;
 const boidColor = "#C40000";
 
@@ -56,16 +56,18 @@ function main() {
         boid.position.y += boid.velocity.y;
 
         // Wrap around the bounding box
-        if (boid.position.x >= boundingBoxWidth) {
-            boid.position.x = 0;
-        } else if (boid.position.x <= 0) {
-            boid.position.x = boundingBoxWidth;
+        if (boid.position.x > boundingBoxWidth) {
+            boid.position.x = 1;
+        } 
+        if (boid.position.x < 0) {
+            boid.position.x = boundingBoxWidth - 1;
         }
-
-        if (boid.position.y >= boundingBoxHeight) {
-            boid.position.y = 0;
-        } else if (boid.position.y < 0) {
-            boid.position.y = boundingBoxHeight;
+        
+        if (boid.position.y > boundingBoxHeight) {
+            boid.position.y = 1;
+        } 
+        if (boid.position.y < 0) {
+            boid.position.y = boundingBoxHeight - 1;
         }
 
         // Find the mean direction of the other boids
